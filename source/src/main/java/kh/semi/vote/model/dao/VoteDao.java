@@ -82,9 +82,41 @@ public class VoteDao {
 	
 	
 	//투표 검수 조회
-	public VoteVo selectCheck(Connection conn, VoteVo vo) {
-		VoteVo result = null;
-		//TODO
+	public List<VoteVo> selectCheck(Connection conn) {
+		List<VoteVo> result = new ArrayList<VoteVo>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String query = "select vname, "
+				+ " extract(year from to_date(substr(vjumin,1,6),'rrmmdd'))||'년'|| "
+				+ " substr(vjumin,3,2)||'월'||substr(vjumin,5,2)||'일' vbirth, "
+				+ " '만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, "
+				+ " decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, "
+				+ " vtime, vconfirm from tbl_vote";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				VoteVo vo = new VoteVo(
+						rs.getString("vname"), 
+						rs.getString("vbirth"), 
+						rs.getString("vage"), 
+						rs.getString("gender"), 
+						rs.getString("mno"), 
+						rs.getString("vtime"), 
+						rs.getString("vconfirm")
+						);
+				result.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		System.out.println("투표검수조회"+result);
+		
+		
 		return result;
 	}
 	

@@ -9,6 +9,7 @@ import kh.semi.vote.model.dao.VoteDao;
 import kh.semi.vote.model.dto.MemberVo;
 import kh.semi.vote.model.dto.ResultDto;
 import kh.semi.vote.model.dto.VoteDto;
+import kh.semi.vote.model.dto.VoteVo;
 
 public class VoteService {
 	
@@ -24,18 +25,17 @@ public class VoteService {
 		
 	//투표 하기
 	public int doVote(VoteDto dto) {
-		int result = 0;
 		Connection conn = getConnection();
+		int result = 0;
 		result = dao.doVote(conn, dto);
 		close(conn);
 		return result;
 	}
 	
 	//투표 검수 조회
-	public VoteDto selectCheck() {
-		VoteDto result = null;
+	public List<VoteVo> selectCheck() {
 		Connection conn = getConnection();
-		//TODO
+		List<VoteVo> result = dao.selectCheck(conn);
 		close(conn);
 		return result;
 	}	

@@ -9,21 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kh.semi.vote.model.dao.VoteDao;
-import kh.semi.vote.model.dto.MemberVo;
+import kh.semi.vote.model.dto.VoteVo;
 import kh.semi.vote.model.service.VoteService;
 
 /**
- * Servlet implementation class VoteMemberLisetServlet
+ * Servlet implementation class VoteCheckGetServlet
  */
-@WebServlet("/member/list")
-public class VoteMemberLisetServlet extends HttpServlet {
+@WebServlet("/vote/check")
+public class VoteCheckGetServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public VoteMemberLisetServlet() {
+    public VoteCheckGetServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,23 +32,25 @@ public class VoteMemberLisetServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		VoteService service = new VoteService();
-		List<MemberVo> vo = service.selectList();
+		List<VoteVo> vo = service.selectCheck();
 		
-		if(vo != null) {
-			request.setAttribute("memberList", vo);
-			request.getRequestDispatcher("/WEB-INF/view/member.jsp").forward(request, response);
+		if(vo!=null) {
+			
+			request.setAttribute("checkList", vo);
+			request.getRequestDispatcher("/WEB-INF/view/check.jsp").forward(request, response);
 		}else {
 			request.getRequestDispatcher("/WEB-INF/error/error.jsp").forward(request, response);
 		}
-
+		
+	
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		doGet(request, response);
-//	}
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
 
 }

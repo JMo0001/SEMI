@@ -12,5 +12,11 @@
 	<nav>
 		<a href="${pageContext.request.contextPath }/member/list">후보조회</a>
 	</nav>
+	<nav>
+		<a href="${pageContext.request.contextPath }/vote/do">투표하기</a>
+	</nav>
+	<nav>
+		<a href="${pageContext.request.contextPath }/vote/check">투표검수조회</a>
+	</nav>
 </body>
 </html>
