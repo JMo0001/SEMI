@@ -92,7 +92,6 @@ public class VoteDao {
 				+ " '만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, "
 				+ " decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, "
 				+ " vtime, vconfirm from tbl_vote";
-		
 		try {
 			pstmt = conn.prepareStatement(query);
 			rs = pstmt.executeQuery();
@@ -115,8 +114,6 @@ public class VoteDao {
 			close(pstmt);
 		}
 		System.out.println("투표검수조회"+result);
-		
-		
 		return result;
 	}
 	
