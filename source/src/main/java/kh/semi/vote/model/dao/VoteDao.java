@@ -92,6 +92,7 @@ public class VoteDao {
 				+ " '만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, "
 				+ " decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, "
 				+ " vtime, vconfirm from tbl_vote";
+		
 		try {
 			pstmt = conn.prepareStatement(query);
 			rs = pstmt.executeQuery();
@@ -118,18 +119,80 @@ public class VoteDao {
 	}
 	
 	
-	//후보자 등수 조회
-	public List<ResultDto> selectRowList(Connection conn, String mno){
-		List<ResultDto> result = null;
-		//TODO
+	//투표 결과 조회
+	public List<ResultVo> VoteEndListServlet(Connection conn){
+		List<ResultVo> result = new ArrayList<ResultVo>();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String query = "select m.mcity, mno, p.pname, m.mname, "
+				+ " extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'"
+				+ "||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||"
+				+ "' (만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, "
+				+ " decode(substr(mjumin,7,1),1,'남',2,'여') gender, "
+				+ " gschool_Name||' 졸업' gschoolname"
+				+ "    from tbl_member m"
+				+ "    join tbl_party p using (pcode) "
+				+ "    join tbl_grade g using (mno)" ;
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				ResultVo vo = new ResultVo(
+						rs.getString("mcity"), 
+						rs.getString("mno"),
+						rs.getString("pname"),
+						rs.getString("mname"),
+						rs.getString("birth"),
+						rs.getString("gender"),
+						rs.getString("gschoolname")
+						);
+				result.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
 		return result;
 	}
 	
 	
-	//투표 결과 조회
-	public List<ResultVo> endList(Connection conn){
-		List<ResultVo> result = null;
-		//TODO
+	//후보자 등수 조회
+	public VoteVo selectRowList(Connection conn, String mno){
+		VoteVo result = null;
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String query = "select mno, mname, count(mno) cnt "
+				+ "    from (select mno, vconfirm from tbl_vote where vconfirm ='Y') v"
+				+ "    join tbl_member m using(mno) "
+				+ "	where mno =?"
+				+ "    group by mno, mname "
+				+ "    order by cnt desc, mno asc";
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, mno);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = new VoteVo(
+						rs.getString("mno"),
+						rs.getString("mname"),
+						rs.getString("cnt")
+						);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs);
+			close(pstmt);
+		}
+		
+		
 		return result;
 	}
 }

@@ -8,6 +8,6 @@
 </head>
 <body>
 	<h2>결과값이 없습니다.</h2>
-	<a href="${pagecontext.request.contextPath }/index" >메인페이지로 돌아가기</a>
+	<a href="${pageContext.request.contextPath }/index" >메인페이지로 돌아가기</a>
 </body>
 </html>

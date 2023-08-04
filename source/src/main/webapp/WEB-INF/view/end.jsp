@@ -1,34 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>후보 조회</title>
+<title>투표 결과</title>
 </head>
 <body>
-	<h2>후보 조회</h2>
+	<h2>투표 결과</h2>
 	<div>
-		<table border='1'>
+		<table border="1">
 			<tr>
-				<th>후보번호</th>
+				<th>선거구명</th>
+				<th>기호</th>
+				<th>정당명</th>
 				<th>성명</th>
-				<th>소속정당</th>
+				<th>성별</th>
+				<th>생년월일(연령)</th>
 				<th>학력</th>
-				<th>주민번호</th>
-				<th>지역구</th>
-				<th>대표전화</th>
 			</tr>
-	<c:forEach items="${memberList }" var="vo">
+	<c:forEach items="${endList }" var="vo">
 			<tr>
-				<td>${vo.mno }</td>
-				<td>${vo.mname }</td>
-				<td>${vo.pname }</td>
-				<td>${vo.pschool }</td>
-				<td>${vo.mjumin }</td>
 				<td>${vo.mcity }</td>
-				<td>${vo.tel }</td>
+				<td>${vo.mno }</td>
+				<td>${vo.pname }</td>
+				<td>${vo.mname }</td>
+				<td>${vo.gender }</td>
+				<td>${vo.birth }</td>
+				<td>${vo.gschoolName }</td>
 			</tr>
 	</c:forEach>
 		</table>

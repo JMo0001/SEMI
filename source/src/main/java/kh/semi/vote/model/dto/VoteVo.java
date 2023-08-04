@@ -16,10 +16,20 @@ public class VoteVo {
 	private String mno;
 	private String vtime;
 	private String vconfirm;
+	private String mname;
+	private String cnt;
 	
 	
 	
 	public VoteVo() {
+	}
+
+
+	public VoteVo(String mno, String mname, String cnt) {
+		super();
+		this.mno = mno;
+		this.mname = mname;
+		this.cnt = cnt;
 	}
 
 
@@ -127,7 +137,27 @@ public class VoteVo {
 		this.vconfirm = vconfirm;
 	}
 
+	public String getMname() {
+		return mname;
+	}
 
+
+
+	public void setMname(String mname) {
+		this.mname = mname;
+	}
+
+
+
+	public String getCnt() {
+		return cnt;
+	}
+
+
+
+	public void setCnt(String cnt) {
+		this.cnt = cnt;
+	}
 
 	
 	

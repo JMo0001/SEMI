@@ -8,6 +8,7 @@ import java.util.List;
 import kh.semi.vote.model.dao.VoteDao;
 import kh.semi.vote.model.dto.MemberVo;
 import kh.semi.vote.model.dto.ResultDto;
+import kh.semi.vote.model.dto.ResultVo;
 import kh.semi.vote.model.dto.VoteDto;
 import kh.semi.vote.model.dto.VoteVo;
 
@@ -40,22 +41,22 @@ public class VoteService {
 		return result;
 	}	
 	
-	//후보자 등수 조회
-	public List<ResultDto> selectRowList(){
-		List<ResultDto> result = null;
-		Connection conn = getConnection();
-		//TODO
-		close(conn);
-		return result;
-	}
-		
-		
 	//투표 결과 조회
-	public List<ResultDto> endList(){
-		List<ResultDto> result = null;
+	public List<ResultVo> VoteEndListServlet(){
+		List<ResultVo> result = null;
 		Connection conn = getConnection();
-		//TODO
+		result = dao.VoteEndListServlet(conn);
 		close(conn);
 		return result;
 	}
+		
+		
+	//후보자 등수 조회
+		public VoteVo selectRowList(String mno){
+			VoteVo result = null;
+			Connection conn =getConnection();
+			result = dao.selectRowList(conn, mno);
+			close(conn);
+			return result;
+		}
 }

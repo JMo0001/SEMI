@@ -33,5 +33,8 @@
 		</c:forEach>
 		</table>
 	</div>
+	<div>
+		<a href="${pageContext.request.contextPath }/index" >메인페이지로 돌아가기</a>
+	</div>
 </body>
 </html>

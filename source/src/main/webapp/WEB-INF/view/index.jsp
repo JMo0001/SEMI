@@ -18,5 +18,11 @@
 	<nav>
 		<a href="${pageContext.request.contextPath }/vote/check">투표검수조회</a>
 	</nav>
+	<nav>
+		<a href="${pageContext.request.contextPath }/end">투표결과조회</a>
+	</nav>
+	<nav>
+		<a href="${pageContext.request.contextPath }/row" >후보자등수조회</a>
+	</nav>
 </body>
 </html>
