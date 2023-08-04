@@ -6,6 +6,13 @@
 <head>
 <meta charset="UTF-8">
 <title>투표하기</title>
+<script>
+	window.onload = loadedHandler;
+	function loadedHandler(){
+		
+	}
+		
+</script>
 </head>
 <body>
 	<h2>투표하기</h2>
