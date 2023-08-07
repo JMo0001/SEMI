@@ -25,7 +25,8 @@ public class VoteDao {
 				+ " decode(pschool, 1,'고졸' ,2,'대졸', 3,'석사', 4,'박사') pschool, "
 				+ " mjumin, mcity, "
 				+ " ptel1||'-'|| ptel2||'-'||ptel3 tel "
-				+ " from tbl_member join tbl_party using (pcode)";
+				+ " from tbl_member join tbl_party using (pcode) "
+				+ " order by mno asc";
 		result = new ArrayList<MemberVo>();
 		try {
 			pstmt=conn.prepareStatement(qeury);

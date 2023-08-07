@@ -1,12 +1,15 @@
 package kh.semi.vote.controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kh.semi.vote.model.dto.MemberVo;
 import kh.semi.vote.model.dto.VoteDto;
 import kh.semi.vote.model.service.VoteService;
 
@@ -29,6 +32,11 @@ public class VoteInsertServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		VoteService service1 = new VoteService();
+		List<MemberVo> vo = service1.selectList();
+		request.setAttribute("memberList", vo);
+		
 		request.getRequestDispatcher("/WEB-INF/view/vote.jsp").forward(request, response);
 		
 	
