@@ -21,7 +21,7 @@
 				<th>생년월일(연령)</th>
 				<th>학력</th>
 				<th>득표수</th>
-				<th>당선여부</th>
+				<th>비고</th>
 			</tr>
 	<c:forEach items="${endList }" var="vo">
 			<tr>
@@ -35,7 +35,7 @@
 				<td>${vo.cnt }</td>
 				<c:choose>
 					<c:when test="${vo.rank==1 }">
-						<td>당선 축하드립니다.</td>
+						<td>당선</td>
 					</c:when>
 					<c:otherwise>
 						<td></td>
