@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>투표 결과</title>
 </head>
+
 <body>
 	<h2>투표 결과</h2>
 	<div>
@@ -19,6 +20,8 @@
 				<th>성별</th>
 				<th>생년월일(연령)</th>
 				<th>학력</th>
+				<th>득표수</th>
+				<th>당선여부</th>
 			</tr>
 	<c:forEach items="${endList }" var="vo">
 			<tr>
@@ -29,6 +32,16 @@
 				<td>${vo.gender }</td>
 				<td>${vo.birth }</td>
 				<td>${vo.gschoolName }</td>
+				<td>${vo.cnt }</td>
+				<c:choose>
+					<c:when test="${vo.rank==1 }">
+						<td>당선 축하드립니다.</td>
+					</c:when>
+					<c:otherwise>
+						<td></td>
+					</c:otherwise>
+				<%-- <td class="rnk">${vo.rank }</td> --%>
+				</c:choose>
 			</tr>
 	</c:forEach>
 		</table>
@@ -36,5 +49,7 @@
 	<div>
 		<a href="${pageContext.request.contextPath }/index" >메인페이지로 돌아가기</a>
 	</div>
+
 </body>
+
 </html>

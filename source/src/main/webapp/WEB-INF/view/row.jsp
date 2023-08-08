@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>후보자 결과 검색</title>
+<title>후보자 득표 내역</title>
 </head>
 <body>
 <c:choose>
@@ -33,7 +33,7 @@
 	<h2>후보자 번호로 검색하기</h2>
 	<div>
 		<form action="${pageContext.request.contextPath }/row" method="get">
-			<input type="text" name="mno">
+			<input type="text" name="mno" placeholder="번호를 입력하세요 (11~)">
 			<button type="submit">조회하기</button>
 		</form>
 	</div>

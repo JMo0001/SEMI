@@ -9,6 +9,7 @@ public class ResultVo {
 //	MJUMIN           CHAR(13)     
 //	GSCHOOL_NAME          VARCHAR2(20) 
 // cnt >> tbl_vote 에서 mno 개수 count
+// rank >> 선거구별 득표수 랭크오버 rank() over()
 	
 	private String mcity;
 	private String mno;
@@ -17,8 +18,8 @@ public class ResultVo {
 	private String gschoolName;
 	private String gender;
 	private String birth;
-	
-	
+	private String cnt;
+	private String rank;
 	
 	
 	public ResultVo() {
@@ -26,10 +27,8 @@ public class ResultVo {
 	}
 
 
-
-
 	public ResultVo(String mcity, String mno, String pname, String mname, String gschoolName, String gender,
-			String birth) {
+			String birth, String cnt, String rank) {
 		super();
 		this.mcity = mcity;
 		this.mno = mno;
@@ -38,19 +37,16 @@ public class ResultVo {
 		this.gschoolName = gschoolName;
 		this.gender = gender;
 		this.birth = birth;
+		this.cnt = cnt;
+		this.rank = rank;
 	}
-
-
 
 
 	@Override
 	public String toString() {
 		return "ResultVo [mcity=" + mcity + ", mno=" + mno + ", pname=" + pname + ", mname=" + mname + ", gschoolName="
-				+ gschoolName + ", gender=" + gender + ", birth=" + birth + "]";
+				+ gschoolName + ", gender=" + gender + ", birth=" + birth + ", cnt=" + cnt + ", rank=" + rank + "]";
 	}
-
-
-
 
 	public String getMcity() {
 		return mcity;
@@ -112,44 +108,42 @@ public class ResultVo {
 		return gschoolName;
 	}
 
-
-
-
 	public void setGschoolName(String gschoolName) {
 		this.gschoolName = gschoolName;
 	}
-
-
 
 
 	public String getGender() {
 		return gender;
 	}
 
-
-
-
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
-
-
 
 	public String getBirth() {
 		return birth;
 	}
 
-
-
-
 	public void setBirth(String birth) {
 		this.birth = birth;
 	}
-	
-	
-	
-	
+
+	public String getCnt() {
+		return cnt;
+	}
+
+	public String getRank() {
+		return rank;
+	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+
+	public void setCnt(String cnt) {
+		this.cnt = cnt;
+	}
 
 	
 }

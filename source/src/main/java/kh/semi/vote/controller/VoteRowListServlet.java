@@ -36,9 +36,8 @@ public class VoteRowListServlet extends HttpServlet {
 		
 			request.setAttribute("rowList", vo);
 			request.getRequestDispatcher("/WEB-INF/view/row.jsp").forward(request, response);
-		
 			
-		
+		System.out.println("rowList :"+vo);
 	}
 
 	/**

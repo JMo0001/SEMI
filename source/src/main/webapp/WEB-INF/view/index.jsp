@@ -22,7 +22,7 @@
 		<a href="${pageContext.request.contextPath }/end">투표결과조회</a>
 	</nav>
 	<nav>
-		<a href="${pageContext.request.contextPath }/row" >후보자등수조회</a>
+		<a href="${pageContext.request.contextPath }/row" >후보자득표수조회</a>
 	</nav>
 </body>
 </html>

@@ -125,15 +125,16 @@ public class VoteDao {
 		List<ResultVo> result = new ArrayList<ResultVo>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String query = "select m.mcity, mno, p.pname, m.mname, "
-				+ " extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'"
-				+ "||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||"
-				+ "' (만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, "
-				+ " decode(substr(mjumin,7,1),1,'남',2,'여') gender, "
-				+ " gschool_Name||' 졸업' gschoolname"
-				+ "    from tbl_member m"
-				+ "    join tbl_party p using (pcode) "
-				+ "    join tbl_grade g using (mno)" ;
+		String query = "select rank() over(partition by mcity order by cnt desc) rnk, mcity, mno, pname, mname, cnt, "
+				+ " gschool_Name||' 졸업' gschoolname, "
+				+ "	extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||' "
+				+ "(만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, "
+				+ "    decode(substr(mjumin,7,1),1,'남',2,'여') gender "
+				+ "    from (select mjumin, pcode, mno, mname, mcity, count(mno) cnt "
+				+ "    from (select mno, vconfirm from tbl_vote where vconfirm ='Y') v "
+				+ "    join tbl_member m using(mno) group by mjumin, mno, mname, mcity, pcode order by mcity, cnt desc) "
+				+ "    join tbl_party using (pcode) "
+				+ "    join tbl_grade using(mno)";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -147,7 +148,9 @@ public class VoteDao {
 						rs.getString("mname"),
 						rs.getString("birth"),
 						rs.getString("gender"),
-						rs.getString("gschoolname")
+						rs.getString("gschoolname"),
+						rs.getString("cnt"),
+						rs.getString("rnk")
 						);
 				result.add(vo);
 			}
@@ -161,30 +164,57 @@ public class VoteDao {
 	}
 	
 	
+	/*
+	 * public List<ResultVo> VoteEndListServlet(Connection conn){ List<ResultVo>
+	 * result = new ArrayList<ResultVo>(); PreparedStatement pstmt = null; ResultSet
+	 * rs = null; String query = "select m.mcity, mno, p.pname, m.mname, " +
+	 * " extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'" +
+	 * "||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||" +
+	 * "' (만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, "
+	 * + " decode(substr(mjumin,7,1),1,'남',2,'여') gender, " +
+	 * " gschool_Name||' 졸업' gschoolname" + "    from tbl_member m" +
+	 * "    join tbl_party p using (pcode) " + "    join tbl_grade g using (mno) " +
+	 * " order by mcity, mno desc";
+	 * 
+	 * try { pstmt = conn.prepareStatement(query); rs = pstmt.executeQuery();
+	 * 
+	 * while(rs.next()) { ResultVo vo = new ResultVo( rs.getString("mcity"),
+	 * rs.getString("mno"), rs.getString("pname"), rs.getString("mname"),
+	 * rs.getString("birth"), rs.getString("gender"), rs.getString("gschoolname") );
+	 * result.add(vo); } } catch (SQLException e) { e.printStackTrace(); } finally {
+	 * close(rs); close(pstmt); } return result; }
+	 */
+	
+	
 	//후보자 등수 조회
 	public VoteVo selectRowList(Connection conn, String mno){
 		VoteVo result = null;
-		
+		System.out.println("aaaaaa"+mno);
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String query = "select mno, mname, count(mno) cnt "
-				+ "    from (select mno, vconfirm from tbl_vote where vconfirm ='Y') v"
+				+ "    from "
+				+ "    (select mno, vconfirm from tbl_vote where vconfirm ='Y') v "
 				+ "    join tbl_member m using(mno) "
-				+ "	where mno =?"
+				+ "	   where mno =? "
 				+ "    group by mno, mname "
-				+ "    order by cnt desc, mno asc";
+//				+ "    order by cnt desc, mno asc "
+				;
 		
 		try {
 			pstmt = conn.prepareStatement(query);
+			System.out.println("bbb2"+mno);
 			pstmt.setString(1, mno);
+			System.out.println("bbb3"+mno);
 			rs = pstmt.executeQuery();
+			System.out.println("bbb4"+mno);
 			if(rs.next()) {
+				System.out.println("bbb"+mno);
 				result = new VoteVo(
 						rs.getString("mno"),
 						rs.getString("mname"),
 						rs.getString("cnt")
 						);
-				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -192,7 +222,7 @@ public class VoteDao {
 			close(rs);
 			close(pstmt);
 		}
-		
+		System.out.println("후보자 번호로 검색하기 :"+result);
 		
 		return result;
 	}

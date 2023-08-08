@@ -11,6 +11,7 @@
 	window.onload = loadedHandler;
 	function loadedHandler(){
 		$("#doVOTE").click(regHandler);
+		$("#resetVOTE").click(resetClickHandler);
 	}
 	
 	function regHandler(){
@@ -50,16 +51,32 @@
 			return false;
 		}
 		var vconfirm = $("[name=vconfirm]").val();
-		if(vconfirm == null){
+		/* if(vconfirm == "no" || vconfirm ==""){
 			alert("유권자확인이 선택되지 않았습니다!");
-			$("#vconfirm").focus();
-			return false;
+			$("[name=vconfirm]").focus();
+			return false; */
+			if($("#xx").prop("checked")){
+				alert("유권자확인이 선택되지 않았습니다!");
+				$("[name=vconfirm]").focus();
+				return false; 
 		}
+		alert("투표하기 정보가 정상적으로 등록 되었습니다!");
 		
 	}
 	
+	function resetClickHandler(){
+		alert("정보를 지우고 처음부터 다시 입력합니다!");
+		$("#vjumin").focus();
+	}	
+	
+	
 	
 </script>
+<style>
+	#xx{
+		display: none;
+	}
+</style>
 </head>
 <body>
 	<h2>투표하기</h2>
@@ -109,9 +126,11 @@
 			<tr>
 				<th>유권자확인</th>
 				<td>
-					<input type="radio" name="vconfirm" id="nn" value="N">
-					<label for="yy">확인</label>
+					<input type="radio" name="vconfirm" id="xx" value ="no" checked>
+					<label for="xx"></label>
 					<input type="radio" name="vconfirm" id="yy" value="Y">
+					<label for="yy">확인</label>
+					<input type="radio" name="vconfirm" id="nn" value="N">
 					<label for="nn">미확인</label>
 				</td>
 			</tr>

@@ -52,11 +52,11 @@ public class VoteService {
 		
 		
 	//후보자 등수 조회
-		public VoteVo selectRowList(String mno){
-			VoteVo result = null;
-			Connection conn =getConnection();
-			result = dao.selectRowList(conn, mno);
-			close(conn);
-			return result;
-		}
+	public VoteVo selectRowList(String mno){
+		VoteVo result = null;
+		Connection conn =getConnection();
+		result = dao.selectRowList(conn, mno);
+		close(conn);
+		return result;
+	}
 }
