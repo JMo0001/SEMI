@@ -14,24 +14,35 @@
 	window.onload = loadedHandler;
 	function loadedHandler(){
 		$("#doVOTE").click(regHandler);
-		$("#resetVOTE").click(resetClickHandler);
+		$("#doRESET").click(resetClickHandler);
 	}
 	
 	function regHandler(){
+		
 		var vjumin = $("#vjumin").val();
-		var regjumin = /[0-9]{13}/;
-		if(!regjumin.test(vjumin)){
-			alert("주민번호가 입력되지 않았습니다!");
+		var regjumin = /^[0-9]{13}$/;
+		if(vjumin==""){
+			alert("주민번호를 입력해 주세요.");
+			$("#vjumin").focus();
+			return false;
+		}else if(!regjumin.test(vjumin)){
+			alert("주민번호가 올바르지 않습니다!");
 			$("#vjumin").focus();
 			return false;
 		}
+		
 		var vname = $("#vname").val();
-		var regvname = /[가-힣]{2,6}/;
-		if(!regvname.test(vname)){
-			alert("성명이 입력되지 않았습니다!");
+		var regvname = /^[가-힣]{2,6}$/;
+		if($("#vname").val()==""){
+			alert("성명을 입력해 주세요.");
+			$("#vname").focus();
+			return false;
+		}else if(!regvname.test(vname)){
+			alert("성명이 올바르지 않습니다!");
 			$("#vname").focus();
 			return false;
 		}
+		
 		var mno = $("#mno").val();
 		console.log(mno);
 		if(mno=="no" || mno==""){
@@ -39,30 +50,42 @@
 			$("#mno").focus();
 			return false;
 		}
+		
 		var vtime = $("#vtime").val();
-		var regvtime = /^[00-23]{1}[00-59]{1}/;
-		if(!regvtime.test(vtime)){
-			alert("투표시간이 입력되지 않았습니다!");
+		var regvtime = /^[0-2][0-9][0-5][0-9]$/;
+		if($("#vtime").val()==""){
+			alert("투표시간을 입력해 주세요."); 
+			$("#vtime").focus();
+			return false;
+		}else if(!regvtime.test(vtime)){
+			alert("투표시간이 올바르지 않습니다!");
 			$("#vtime").focus();
 			return false;
 		}
+		
 		var varea = $("#varea").val();
-		var regvarea = /제[1-2]투표장/;
-		if(!regvarea.test(varea)){
-			alert("투표장소가 입력되지 않았습니다!");
+		var regvarea = /^제[1-2]투표장$/;
+		if(varea == ""){
+			alert("투표장소를 입력해 주세요.");
+			$("#varea").focus();
+			return false;
+		}else if(!regvarea.test(varea)){
+			alert("투표장소가 올바르지 않습니다!");
 			$("#varea").focus();
 			return false;
 		}
-		var vconfirm = $("[name=vconfirm]").val();
+		
+		var vconfirm = $("[name=vconfirm]:checked").val();
 		/* if(vconfirm == "no" || vconfirm ==""){
 			alert("유권자확인이 선택되지 않았습니다!");
 			$("[name=vconfirm]").focus();
 			return false; */
-			if($("#xx").prop("checked")){
+			if(vconfirm == 'no'){
 				alert("유권자확인이 선택되지 않았습니다!");
 				$("[name=vconfirm]").focus();
-				return false; 
-		}
+				return false;
+			}
+			
 		alert("투표하기 정보가 정상적으로 등록 되었습니다!");
 		
 	}
@@ -105,7 +128,7 @@
 					<th>투표번호</th>
 					<td class="left">
 						<select name="mno" class="check" id="mno">
-							<option $("#mno").val() ="no"></option>
+							<option value ="no"></option>
 					<c:forEach items="${memberList }" var="member">
 							<option value="${member.mno }">[${member.mno}] ${member.mname }</option>
 						<!-- <option value="1">[1] 김후보</option>
@@ -143,7 +166,7 @@
 				<tr>
 					<td colspan="2">
 						<button type="submit" class="r" id="doVOTE">투표하기</button>
-						<button type="reset" class="r" id="resetVOTE">다시하기</button>
+						<button type="reset" class="r" id="doRESET">다시하기</button>
 				</tr>
 			</table>
 		</form>

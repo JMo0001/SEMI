@@ -61,4 +61,23 @@ from
     join tbl_vote using(mno)
     group by mno, mcity
     order by mcity, cnt desc )
+    
+    
+    
 ;
+
+select * from
+(
+select rownum, tb1.* from
+(
+select vname, 
+				extract(year from to_date(substr(vjumin,1,6),'rrmmdd'))||'년'||
+			 substr(vjumin,3,2)||'월'||substr(vjumin,5,2)||'일' vbirth,
+			 '만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage,
+			 decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, 
+			 vtime, vconfirm from tbl_vote 
+             )tb1)tb2
+             
+            ;
+            
+select count(*) from tbl_vote;

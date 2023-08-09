@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <header>
 	<div class = "h">
-		<h2>지역구의원투표</h2>
+		<h2>SEMI - 지역구의원투표</h2>
 	</div>
 	<div class ="nav-container">
 		<nav>
