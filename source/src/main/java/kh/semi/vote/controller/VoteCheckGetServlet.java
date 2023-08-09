@@ -2,6 +2,7 @@ package kh.semi.vote.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,17 +33,42 @@ public class VoteCheckGetServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		VoteService service = new VoteService();
-		List<VoteVo> vo = service.selectCheck();
 		
-		if(vo!=null) {
-			
-			request.setAttribute("checkList", vo);
+		int currentPage = 1;
+		int pageSize = 10;
+		String pageNoStr = request.getParameter("pageNo");
+		if(pageNoStr != null) {
+			try {
+			currentPage = Integer.parseInt(pageNoStr);
+			} catch ( NumberFormatException e){
+				e.printStackTrace();
+			}
+		}
+		Map<String, Object> map = null;
+		
+		map = service.selectCheck(currentPage, 10);
+		request.setAttribute("checkList", map.get("checkList"));
+				
+		int pageBlockSize = 5;
+		int totalCnt = (Integer)map.get("totalCnt");
+		int totalPageNum = totalCnt/pageSize + (totalCnt%pageSize == 0 ? 0:1);
+		int startPageNum = 1;
+		if((currentPage%pageBlockSize) == 0) {
+			startPageNum = ((currentPage/pageBlockSize)-1)*pageBlockSize +1;
+		} else {
+			startPageNum = ((currentPage/pageBlockSize))*pageBlockSize +1;
+		}
+		int endPageNum = (startPageNum+pageBlockSize > totalPageNum) ? totalPageNum : startPageNum+pageBlockSize-1;
+		request.setAttribute("totalPageNum", totalPageNum);
+		request.setAttribute("startPageNum", startPageNum);
+		request.setAttribute("endPageNum", endPageNum);
+		request.setAttribute("currentPage", currentPage); 
+	
+		if(map!=null) {
 			request.getRequestDispatcher("/WEB-INF/view/check.jsp").forward(request, response);
 		}else {
 			request.getRequestDispatcher("/WEB-INF/error/error.jsp").forward(request, response);
 		}
-		
-	
 	}
 
 	/**

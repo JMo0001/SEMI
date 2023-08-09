@@ -3,11 +3,12 @@ package kh.semi.vote.model.service;
 import static kh.semi.common.jdbc.JdbcTemplate.*;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kh.semi.vote.model.dao.VoteDao;
 import kh.semi.vote.model.dto.MemberVo;
-import kh.semi.vote.model.dto.ResultDto;
 import kh.semi.vote.model.dto.ResultVo;
 import kh.semi.vote.model.dto.VoteDto;
 import kh.semi.vote.model.dto.VoteVo;
@@ -34,11 +35,16 @@ public class VoteService {
 	}
 	
 	//투표 검수 조회
-	public List<VoteVo> selectCheck() {
+	public Map<String, Object> selectCheck(int currentPage, int pageSize) {
 		Connection conn = getConnection();
-		List<VoteVo> result = dao.selectCheck(conn);
+		int totalCnt = dao.totalCnt(conn);
+		List<VoteVo> result = dao.selectCheck(conn, currentPage, pageSize, totalCnt);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("totalCnt", totalCnt);
+		map.put("checkList",result);
+		
 		close(conn);
-		return result;
+		return map;
 	}	
 	
 	//투표 결과 조회

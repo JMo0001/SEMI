@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link href="${pageContext.request.contextPath }/resources/css/header.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath }/resources/css/section.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath }/resources/css/footer.css" rel="stylesheet">
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,73 +82,76 @@
 </style>
 </head>
 <body>
-	<h2>투표하기</h2>
-	<form action="${pageContext.request.contextPath }/vote/do" method="post">
-		<table border ="1">
-			<tr>
-				<th>주민번호</th>
-				<td>
-					<input type="text" name="vjumin" class="check" id="vjumin">
-					예 : 1201011010101
-				</td>
-			</tr>
-			<tr>
-				<th>성명</th>
-				<td>
-					<input type="text" name="vname" class="check" id="vname">
-				</td>
-			</tr>
-			<tr>
-				<th>투표번호</th>
-				<td>
-					<select name="mno" class="check" id="mno">
-						<option $("#mno").val() ="no"></option>
+<%@include file="/WEB-INF/view/header.jsp" %>
+<section>
+	<div class="section-wrap">
+		<h2>투표하기</h2>
+		<form action="${pageContext.request.contextPath }/vote/do" method="post">
+			<table border ="1">
+				<tr>
+					<th>주민번호</th>
+					<td class="left">
+						<input type="text" name="vjumin" class="check" id="vjumin">
+						예 : 1201011010101
+					</td>
+				</tr>
+				<tr>
+					<th>성명</th>
+					<td class="left">
+						<input type="text" name="vname" class="check" id="vname">
+					</td>
+				</tr>
+				<tr>
+					<th>투표번호</th>
+					<td class="left">
+						<select name="mno" class="check" id="mno">
+							<option $("#mno").val() ="no"></option>
 					<c:forEach items="${memberList }" var="member">
-						<option value="${member.mno }">[${member.mno}] ${member.mname }</option>
+							<option value="${member.mno }">[${member.mno}] ${member.mname }</option>
 						<!-- <option value="1">[1] 김후보</option>
 						<option value="2">[2] 이후보</option>
 						<option value="3">[3] 박후보</option>
 						<option value="4">[4] 조후보</option>
 						<option value="5">[5] 최후보</option> -->
 					</c:forEach>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<th>투표시간</th>
-				<td>
-					<input type="text" name="vtime" class="check" id ="vtime">
-				</td>
-			</tr>
-			<tr>
-				<th>투표장소</th>
-				<td>
-					<input type="text" name="varea" class="check" id="varea">
-				</td>
-			</tr>
-			<tr>
-				<th>유권자확인</th>
-				<td>
-					<input type="radio" name="vconfirm" id="xx" value ="no" checked>
-					<label for="xx"></label>
-					<input type="radio" name="vconfirm" id="yy" value="Y">
-					<label for="yy">확인</label>
-					<input type="radio" name="vconfirm" id="nn" value="N">
-					<label for="nn">미확인</label>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<button type="submit" class="r" id="doVOTE">투표하기</button>
-					<button type="reset" class="r" id="resetVOTE">다시하기</button>
-			</tr>
-		</table>
-	</form>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>투표시간</th>
+					<td class="left">
+						<input type="text" name="vtime" class="check" id ="vtime">
+					</td>
+				</tr>
+				<tr>
+					<th>투표장소</th>
+					<td class="left">
+						<input type="text" name="varea" class="check" id="varea">
+					</td>
+				</tr>
+				<tr>
+					<th>유권자확인</th>
+					<td class="left">
+						<input type="radio" name="vconfirm" id="xx" value ="no" checked>
+						<label for="xx"></label>
+						<input type="radio" name="vconfirm" id="yy" value="Y">
+						<label for="yy">확인</label>
+						<input type="radio" name="vconfirm" id="nn" value="N">
+						<label for="nn">미확인</label>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button type="submit" class="r" id="doVOTE">투표하기</button>
+						<button type="reset" class="r" id="resetVOTE">다시하기</button>
+				</tr>
+			</table>
+		</form>
+	</div>
 	<div>
 		<a href="${pageContext.request.contextPath }/index" >메인페이지로 돌아가기</a>
 	</div>
-	
-	
-	
+</section>
+<%@include file="/WEB-INF/view/footer.jsp" %>
 </body>
 </html>

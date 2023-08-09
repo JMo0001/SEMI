@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+
+header{
+		background-color: black;
+		color: white;
+		text-align: center;
+		margin: 0 auto;
+	}
+	header .h{
+		padding: 5px;
+	}
+	header > .nav-container{
+		height:40px;
+		background-color: grey;
+		color: white;		
+		padding: 2px;
+	}
+	header > .nav-container ul{
+		overflow:hidden;
+		list-style:none;
+	}
+	header > .nav-container li{
+		float:left;
+		width:150px;
+		align-content: center;
+	}
+	header > .nav-container  a:link, .nav-container a:visited {
+		text-align: center;
+		text-decoration: none;
+		color: white;
+	}

@@ -9,7 +9,6 @@ import java.util.List;
 
 import static kh.semi.common.jdbc.JdbcTemplate.*;
 import kh.semi.vote.model.dto.MemberVo;
-import kh.semi.vote.model.dto.ResultDto;
 import kh.semi.vote.model.dto.ResultVo;
 import kh.semi.vote.model.dto.VoteDto;
 import kh.semi.vote.model.dto.VoteVo;
@@ -83,20 +82,33 @@ public class VoteDao {
 	
 	
 	//투표 검수 조회
-	public List<VoteVo> selectCheck(Connection conn) {
-		List<VoteVo> result = new ArrayList<VoteVo>();
+	public List<VoteVo> selectCheck(Connection conn, int currentPage, int pageSize, int totalCnt) {
+		List<VoteVo> result = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String query = "select vname, "
+		String query = "select * from "
+				+ " (select rownum r1, tb1.* from "
+				+ " (select vname, "
 				+ " extract(year from to_date(substr(vjumin,1,6),'rrmmdd'))||'년'|| "
 				+ " substr(vjumin,3,2)||'월'||substr(vjumin,5,2)||'일' vbirth, "
 				+ " '만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, "
 				+ " decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, "
-				+ " vtime, vconfirm from tbl_vote";
+				+ " vtime, vconfirm from tbl_vote) tb1 )tb2 "
+				+ " where r1 between ? and ?";
+		
+		int startRownum =0;
+		int endRownum = 0;
+		startRownum = (currentPage-1)*pageSize +1;
+		endRownum = ((currentPage*pageSize) > totalCnt) ? totalCnt: (currentPage*pageSize);
 		
 		try {
 			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, startRownum);
+			pstmt.setInt(2, endRownum);
 			rs = pstmt.executeQuery();
+			
+			result = new ArrayList<VoteVo>();
+			
 			while(rs.next()) {
 				VoteVo vo = new VoteVo(
 						rs.getString("vname"), 
@@ -116,6 +128,30 @@ public class VoteDao {
 			close(pstmt);
 		}
 		System.out.println("투표검수조회"+result);
+		return result;
+	}
+	
+	//페이징 위한 total count
+	public int totalCnt(Connection conn) {
+		int result = 0;
+		String tQuery ="select count(*) cnt from tbl_vote";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(tQuery);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result=rs.getInt("cnt");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		
 		return result;
 	}
 	
@@ -163,27 +199,7 @@ public class VoteDao {
 		return result;
 	}
 	
-	
-	/*
-	 * public List<ResultVo> VoteEndListServlet(Connection conn){ List<ResultVo>
-	 * result = new ArrayList<ResultVo>(); PreparedStatement pstmt = null; ResultSet
-	 * rs = null; String query = "select m.mcity, mno, p.pname, m.mname, " +
-	 * " extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'" +
-	 * "||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||" +
-	 * "' (만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, "
-	 * + " decode(substr(mjumin,7,1),1,'남',2,'여') gender, " +
-	 * " gschool_Name||' 졸업' gschoolname" + "    from tbl_member m" +
-	 * "    join tbl_party p using (pcode) " + "    join tbl_grade g using (mno) " +
-	 * " order by mcity, mno desc";
-	 * 
-	 * try { pstmt = conn.prepareStatement(query); rs = pstmt.executeQuery();
-	 * 
-	 * while(rs.next()) { ResultVo vo = new ResultVo( rs.getString("mcity"),
-	 * rs.getString("mno"), rs.getString("pname"), rs.getString("mname"),
-	 * rs.getString("birth"), rs.getString("gender"), rs.getString("gschoolname") );
-	 * result.add(vo); } } catch (SQLException e) { e.printStackTrace(); } finally {
-	 * close(rs); close(pstmt); } return result; }
-	 */
+
 	
 	
 	//후보자 등수 조회

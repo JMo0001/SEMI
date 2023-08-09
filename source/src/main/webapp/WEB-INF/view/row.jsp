@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<link href="${pageContext.request.contextPath }/resources/css/header.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath }/resources/css/section.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath }/resources/css/footer.css" rel="stylesheet">
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +11,11 @@
 <title>후보자 득표 내역</title>
 </head>
 <body>
+<%@include file="/WEB-INF/view/header.jsp" %>
 <c:choose>
 <c:when test="${rowList != null }">
-	<h2>득표 내역</h2>
-	<div>
+	<div class="section-wrap">
+		<h2>득표 내역</h2>
 		<table border="1">
 			<tr>
 				<th>기호</th>
@@ -30,8 +34,8 @@
 	</div>
 </c:when>
 <c:otherwise>
-	<h2>후보자 번호로 검색하기</h2>
-	<div>
+	<div class="section-wrap">
+		<h2>후보자 번호로 검색하기</h2>
 		<form action="${pageContext.request.contextPath }/row" method="get">
 			<input type="text" name="mno" placeholder="번호를 입력하세요 (11~)">
 			<button type="submit">조회하기</button>
@@ -42,5 +46,6 @@
 	</div>
 </c:otherwise>
 </c:choose>
+<%@include file="/WEB-INF/view/footer.jsp" %>
 </body>
 </html>

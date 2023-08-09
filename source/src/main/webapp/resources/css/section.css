@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+.section-wrap{
+	margin: 0 auto;
+	text-align: center;
+}
+.section-wrap table{
+	margin: 5 auto;	
+	width: 70%;
+	text-align: center;
+	border-collapse: collapse;
+}
+.section-wrap table tr{
+	height: 40px;
+}
+
+.section-wrap .left{
+	text-align: left;
+}
