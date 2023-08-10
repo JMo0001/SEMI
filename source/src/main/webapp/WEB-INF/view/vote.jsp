@@ -52,7 +52,7 @@
 		}
 		
 		var vtime = $("#vtime").val();
-		var regvtime = /^[0-2][0-9][0-5][0-9]$/;
+		var regvtime = /^([01][0-9]|2[0-3])([0-5][0-9])$/;
 		if($("#vtime").val()==""){
 			alert("투표시간을 입력해 주세요."); 
 			$("#vtime").focus();

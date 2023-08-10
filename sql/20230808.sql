@@ -81,3 +81,4 @@ select vname,
             ;
             
 select count(*) from tbl_vote;
+
