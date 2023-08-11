@@ -28,20 +28,30 @@ select rank()over(partition by mcity order by cnt desc) rank, mcity, mno, pname,
     join tbl_grade using(mno)
     
 ;
-
-select mcity, mno, count(mno) cnt
+select mcity, mno, manme cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per
+from
+(
+select mcity, mno, mname, count(mno) cnt
     from tbl_vote 
     join tbl_member using(mno)
     where vconfirm = 'Y' 
-    group by mno, mcity 
+    group by mno, mcity, mname 
     order by mcity, mno desc
+    )
 ;
-select mcity from tbl_member group by mcity
-
-
-
-;
-
+select * from
+(
+select mcity, mno, mname, cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per
+    from (select mcity, mno, mname, count(mno) cnt 
+            from tbl_member 
+            join tbl_vote using(mno)
+            where vconfirm='Y'
+            group by mcity, mno, mname 
+            order by mcity, cnt desc)
+            )
+            where mno = 11
+            
+            ;
 
 
 

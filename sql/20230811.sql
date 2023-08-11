@@ -34,7 +34,7 @@ select mno, mname, mcity, cnt, round(cnt/al*100,1) "득표율"
     join v_all a using(mcity)
 ;
 
-select mno, mname, mcity, cnt, round(ratio_to_report(cnt) over(partition by mcity),1)
+select mno, mname, mcity, cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per
 from
 (
 select mno, mname, mcity, count(mno) cnt
