@@ -5,9 +5,9 @@ select m.mcity, mno, p.pname, m.mname,
     from tbl_member m
     join tbl_party p using (pcode) 
     join tbl_grade g using (mno)
-    join 
+    
 ;
-select rank()over(partition by mcity order by cnt desc) rnk, mcity, mno, pname, mname, cnt, 
+select rank()over(partition by mcity order by cnt desc) rnk, mcity, mno, pname, mname, cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1) per,
 				gschool_Name||' 졸업' gschoolname, 
 				extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||' 
 				(만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, 

@@ -18,6 +18,7 @@ public class VoteVo {
 	private String vconfirm;
 	private String mname;
 	private String cnt;
+	private String per;
 	
 	
 	
@@ -25,12 +26,20 @@ public class VoteVo {
 	}
 
 
-	public VoteVo(String mno, String mname, String cnt) {
+	
+
+
+
+	public VoteVo(String mno, String mname, String cnt, String per) {
 		super();
 		this.mno = mno;
 		this.mname = mname;
 		this.cnt = cnt;
+		this.per = per;
 	}
+
+
+	
 
 
 
@@ -47,11 +56,56 @@ public class VoteVo {
 
 
 
+
+
+
+	public VoteVo(String vname, String vbirth, String vage, String gender, String mno, String vtime, String vconfirm,
+			String mname, String cnt, String per) {
+		super();
+		this.vname = vname;
+		this.vbirth = vbirth;
+		this.vage = vage;
+		this.gender = gender;
+		this.mno = mno;
+		this.vtime = vtime;
+		this.vconfirm = vconfirm;
+		this.mname = mname;
+		this.cnt = cnt;
+		this.per = per;
+	}
+
+
+
+
+
+
 	@Override
 	public String toString() {
 		return "VoteVo [vname=" + vname + ", vbirth=" + vbirth + ", vage=" + vage + ", gender=" + gender + ", mno="
-				+ mno + ", vtime=" + vtime + ", vconfirm=" + vconfirm + "]";
+				+ mno + ", vtime=" + vtime + ", vconfirm=" + vconfirm + ", mname=" + mname + ", cnt=" + cnt + ", per="
+				+ per + "]";
 	}
+
+
+
+
+
+
+	public String getPer() {
+		return per;
+	}
+
+
+
+
+
+
+	public void setPer(String per) {
+		this.per = per;
+	}
+
+
+
 
 
 

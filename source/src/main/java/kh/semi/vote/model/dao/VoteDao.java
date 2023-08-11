@@ -165,7 +165,7 @@ public class VoteDao {
 				+ " gschool_Name||' 졸업' gschoolname, "
 				+ "	extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||' "
 				+ "(만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, "
-				+ "    decode(substr(mjumin,7,1),1,'남',2,'여') gender "
+				+ "    decode(substr(mjumin,7,1),1,'남',2,'여') gender, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per  "
 				+ "    from (select mjumin, pcode, mno, mname, mcity, count(mno) cnt "
 				+ "    from (select mno, vconfirm from tbl_vote where vconfirm ='Y') v "
 				+ "    join tbl_member m using(mno) group by mjumin, mno, mname, mcity, pcode order by mcity, cnt desc) "
@@ -186,7 +186,8 @@ public class VoteDao {
 						rs.getString("gender"),
 						rs.getString("gschoolname"),
 						rs.getString("cnt"),
-						rs.getString("rnk")
+						rs.getString("rnk"),
+						rs.getString("per")
 						);
 				result.add(vo);
 			}
@@ -202,20 +203,21 @@ public class VoteDao {
 
 	
 	
-	//후보자 등수 조회
+	//후보자 득표 조회
 	public VoteVo selectRowList(Connection conn, String mno){
 		VoteVo result = null;
 		System.out.println("aaaaaa"+mno);
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String query = "select mno, mname, count(mno) cnt "
-				+ "    from "
-				+ "    (select mno, vconfirm from tbl_vote where vconfirm ='Y') v "
-				+ "    join tbl_member m using(mno) "
-				+ "	   where mno =? "
-				+ "    group by mno, mname "
-//				+ "    order by cnt desc, mno asc "
-				;
+		String query ="select * from "
+				+ " ( select mcity, mno, mname, cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per "
+				+ "    from (select mcity, mno, mname, count(mno) cnt "
+				+ "            from tbl_member "
+				+ "            join tbl_vote using(mno) "
+				+ "            where vconfirm='Y' "
+				+ "            group by mcity, mno, mname "
+				+ "            order by mcity, cnt desc)"
+				+ "	) where mno=? ";
 		
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -229,7 +231,8 @@ public class VoteDao {
 				result = new VoteVo(
 						rs.getString("mno"),
 						rs.getString("mname"),
-						rs.getString("cnt")
+						rs.getString("cnt"),
+						rs.getString("per")
 						);
 			}
 		} catch (SQLException e) {

@@ -21,11 +21,13 @@
 				<th>기호</th>
 				<th>성명</th>
 				<th>득표수</th>
+				<th>득표율</th>
 			</tr>
 			<tr>
 				<td>${rowList.mno }</td>
 				<td>${rowList.mname }</td>
 				<td>${rowList.cnt }</td>
+				<td>${rowList.per }</td>
 			</tr>
 		</table>
 	</div>

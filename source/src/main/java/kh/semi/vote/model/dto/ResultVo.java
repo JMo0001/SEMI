@@ -20,6 +20,7 @@ public class ResultVo {
 	private String birth;
 	private String cnt;
 	private String rank;
+	private String per;
 	
 	
 	public ResultVo() {
@@ -27,8 +28,11 @@ public class ResultVo {
 	}
 
 
+	
+
+
 	public ResultVo(String mcity, String mno, String pname, String mname, String gschoolName, String gender,
-			String birth, String cnt, String rank) {
+			String birth, String cnt, String rank, String per) {
 		super();
 		this.mcity = mcity;
 		this.mno = mno;
@@ -39,14 +43,24 @@ public class ResultVo {
 		this.birth = birth;
 		this.cnt = cnt;
 		this.rank = rank;
+		this.per = per;
 	}
 
 
+
+
+
+	
 	@Override
 	public String toString() {
 		return "ResultVo [mcity=" + mcity + ", mno=" + mno + ", pname=" + pname + ", mname=" + mname + ", gschoolName="
-				+ gschoolName + ", gender=" + gender + ", birth=" + birth + ", cnt=" + cnt + ", rank=" + rank + "]";
+				+ gschoolName + ", gender=" + gender + ", birth=" + birth + ", cnt=" + cnt + ", rank=" + rank + ", per="
+				+ per + "]";
 	}
+
+
+
+
 
 	public String getMcity() {
 		return mcity;
@@ -143,6 +157,22 @@ public class ResultVo {
 
 	public void setCnt(String cnt) {
 		this.cnt = cnt;
+	}
+
+
+
+
+
+	public String getPer() {
+		return per;
+	}
+
+
+
+
+
+	public void setPer(String per) {
+		this.per = per;
 	}
 
 	
