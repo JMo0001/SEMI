@@ -17,13 +17,13 @@ import kh.semi.vote.model.service.VoteService;
  * Servlet implementation class VoteCheckGetServlet
  */
 @WebServlet("/vote/check")
-public class VoteCheckGetServlet extends HttpServlet {
+public class VoteCheckDoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public VoteCheckGetServlet() {
+    public VoteCheckDoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

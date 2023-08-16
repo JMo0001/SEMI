@@ -1,29 +1,26 @@
 package kh.semi.vote.controller;
 
 import java.io.IOException;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kh.semi.vote.model.dao.VoteDao;
-import kh.semi.vote.model.dto.MemberVo;
+import kh.semi.vote.model.dto.VoteVo;
 import kh.semi.vote.model.service.VoteService;
 
 /**
- * Servlet implementation class VoteMemberLisetServlet
+ * Servlet implementation class VoteRowListServlet
  */
-@WebServlet("/member/list")
-public class VoteMemberLisetServlet extends HttpServlet {
+@WebServlet("/row")
+public class VoteRowListDoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public VoteMemberLisetServlet() {
+    public VoteRowListDoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,16 +29,15 @@ public class VoteMemberLisetServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String mno = request.getParameter("mno");
+		System.out.println(mno);
 		VoteService service = new VoteService();
-		List<MemberVo> vo = service.selectList();
+		VoteVo vo = service.selectRowList(mno);
 		
-		if(vo != null) {
-			request.setAttribute("memberList", vo);
-			request.getRequestDispatcher("/WEB-INF/view/member.jsp").forward(request, response);
-		}else {
-			request.getRequestDispatcher("/WEB-INF/error/error.jsp").forward(request, response);
-		}
-
+			request.setAttribute("rowList", vo);
+			request.getRequestDispatcher("/WEB-INF/view/row.jsp").forward(request, response);
+			
+		System.out.println("rowList :"+vo);
 	}
 
 	/**
