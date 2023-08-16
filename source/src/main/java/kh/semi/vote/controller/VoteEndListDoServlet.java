@@ -16,13 +16,13 @@ import kh.semi.vote.model.service.VoteService;
  * Servlet implementation class VoteEndListServlet
  */
 @WebServlet("/end")
-public class VoteEndDoServlet extends HttpServlet {
+public class VoteEndListDoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public VoteEndDoServlet() {
+    public VoteEndListDoServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
