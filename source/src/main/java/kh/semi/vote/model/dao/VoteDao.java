@@ -48,7 +48,6 @@ public class VoteDao {
 			close(rs);
 			close(pstmt);
 		}
-		
 		return result;
 	}
 	
@@ -106,9 +105,7 @@ public class VoteDao {
 			pstmt.setInt(1, startRownum);
 			pstmt.setInt(2, endRownum);
 			rs = pstmt.executeQuery();
-			
 			result = new ArrayList<VoteVo>();
-			
 			while(rs.next()) {
 				VoteVo vo = new VoteVo(
 						rs.getString("vname"), 
