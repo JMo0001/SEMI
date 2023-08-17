@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="voteMapper">
+
+	<resultMap type="MemberVo" id="resultList">
+		<id property="mno" column="mno"/>
+		<result property="mname" column="mname"/>
+		<result property="mjumin" column="mjumin"/>
+		<result property="pschool" column="pschool"/>
+		<result property="mcity" column="mcity"/>
+		<result property="pname" column="pname"/>
+		<result property="tel" column="tel"/>
+	</resultMap>
+	
+	<resultMap type="VoteDto" id="insert">
+		<id property="vjumin" column="vjumin"/>
+		<result property="vname" column="vname"/>
+		<result property="vtime" column="vtime"/>
+		<result property="varea" column="varea"/>
+		<result property="vconfirm" column="vconfirm"/>
+		<result property="mno" column="mno"/>
+	</resultMap>
+	
+	<resultMap type="VoteVo" id="result">
+		<id property="vname" column="vname"/>
+		<result property="vbirth" column="vbirth"/>
+		<result property="vage" column="vage"/>
+		<result property="gender" column="gender"/>
+		<result property="mno" column="mno"/>
+		<result property="vtime" column="vtime"/>
+		<result property="vconfirm" column="vconfirm"/>
+		<result property="mname" column="mname"/>
+		<result property="cnt" column="cnt"/>
+		<result property="per" column="per"/>
+	</resultMap>
+	
+	<resultMap type="ResultVo" id="resultVote">
+		<id property="mcity" column="mcity"/>
+		<result property="mno" column="mno"/>
+		<result property="pname" column="pname"/>
+		<result property="mname" column="mname"/>
+		<result property="gschoolName" column="gschoolName"/>
+		<result property="gender" column="gender"/>
+		<result property="birth" column="birth"/>
+		<result property="cnt" column="cnt"/>
+		<result property="rank" column="rank"/>
+		<result property="per" column="per"/>
+	</resultMap>
+
+	<select id="selectList" resultMap="resultList">
+		select mno, mname, pname, decode(pschool, 1,'고졸' ,2,'대졸', 3,'석사', 4,'박사') pschool, 
+				 mjumin, mcity, ptel1||'-'|| ptel2||'-'||ptel3 tel 
+				 from tbl_member join tbl_party using (pcode) 
+				 order by mno asc
+	</select>
+
+	<insert id="doVote"  parameterType="VoteDto">
+		INSERT INTO TBL_VOTE (VJUMIN, VNAME, VTIME, VAREA, VCONFIRM, MNO) 
+			values (#{vjumin}, #{vname}, #{vtime}, #{varea}, #{vconfirm}, #{mno})
+	</insert>
+	
+	<select id="selectCheck" resultMap="result">
+		select * from (select rownum r1, tb1.* from (select vname, 
+				extract(year from to_date(substr(vjumin,1,6),'rrmmdd'))||'년'|| 
+				substr(vjumin,3,2)||'월'||substr(vjumin,5,2)||'일' vbirth, 
+				'만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, 
+				decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, 
+				vtime, vconfirm from tbl_vote) tb1 )tb2 
+				<!-- where r1 between ? and ? -->
+	</select>
+	
+	<select id="voteEndList" resultMap="resultVote">
+		select rank() over(partition by mcity order by cnt desc) rank, mcity, mno, pname, mname, cnt, 
+				gschool_Name||' 졸업' gschoolname, 
+				extract(year from to_date(substr(mjumin,1,6),'rrmmdd'))||'년'||substr(mjumin,3,2)||'월'||substr(mjumin,5,2)||'일'||' 
+				(만'||trunc(to_number(sysdate-to_date(substr(mjumin,1,6),'rrmmdd'))/365)||'세)' birth, 
+				    decode(substr(mjumin,7,1),1,'남',2,'여') gender, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per  
+				    from (select mjumin, pcode, mno, mname, mcity, count(mno) cnt 
+				    from (select mno, vconfirm from tbl_vote where vconfirm ='Y') v 
+				    join tbl_member m using(mno) group by mjumin, mno, mname, mcity, pcode order by mcity, cnt desc) 
+				    join tbl_party using (pcode) 
+				    join tbl_grade using(mno)
+	</select>
+	
+	<select id="selectRowList" resultMap="result" parameterType="string">
+		select * from 
+				( select mcity, mno, mname, cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per 
+				  from (select mcity, mno, mname, count(mno) cnt 
+				  from tbl_member 
+				  join tbl_vote using(mno)
+			      where vconfirm='Y' 
+				  group by mcity, mno, mname 
+			      order by mcity, cnt desc)
+					) where mno=#{mno}
+	</select>
+
+</mapper>

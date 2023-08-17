@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+
+import kh.semi.common.mybatis.MybatisTemplate;
 import kh.semi.vote.model.dao.VoteDao;
 import kh.semi.vote.model.dto.MemberVo;
 import kh.semi.vote.model.dto.ResultVo;
@@ -19,40 +22,38 @@ public class VoteService {
 	
 	//후보 조회
 	public List<MemberVo> selectList() {
-		Connection conn = getConnection();
-		List<MemberVo> result = dao.selectList(conn);
-		close(conn);
+		SqlSession session = MybatisTemplate.getSqlSession(true);
+		List<MemberVo> result = dao.selectList(session);
+		session.close();
 		return result;
 	}
 		
 	//투표 하기
 	public int doVote(VoteDto dto) {
-		Connection conn = getConnection();
+		SqlSession session = MybatisTemplate.getSqlSession(true);
 		int result = 0;
-		result = dao.doVote(conn, dto);
-		close(conn);
+		result = dao.doVote(session, dto);
+		session.close();
 		return result;
 	}
 	
 	//투표 검수 조회
-	public Map<String, Object> selectCheck(int currentPage, int pageSize) {
-		Connection conn = getConnection();
-		int totalCnt = dao.totalCnt(conn);
-		List<VoteVo> result = dao.selectCheck(conn, currentPage, pageSize, totalCnt);
+	public Map<String, Object> selectCheck( int currentPage, int pageSize) {
+		SqlSession session = MybatisTemplate.getSqlSession(true);
+		int totalCnt = dao.totalCnt(session);
+		List<VoteVo> result = dao.selectCheck(session, currentPage, pageSize, totalCnt);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("totalCnt", totalCnt);
 		map.put("checkList",result);
-		
-		close(conn);
+		session.close();
 		return map;
 	}	
 	
 	//투표 결과 조회
-	public List<ResultVo> VoteEndListServlet(){
-		List<ResultVo> result = null;
-		Connection conn = getConnection();
-		result = dao.VoteEndListServlet(conn);
-		close(conn);
+	public List<ResultVo> voteEndList(){
+		SqlSession session = MybatisTemplate.getSqlSession(true);
+		List<ResultVo> result = dao.voteEndList(session);
+		session.close();
 		return result;
 	}
 		
@@ -60,9 +61,9 @@ public class VoteService {
 	//후보자 등수 조회
 	public VoteVo selectRowList(String mno){
 		VoteVo result = null;
-		Connection conn =getConnection();
-		result = dao.selectRowList(conn, mno);
-		close(conn);
+		SqlSession session = MybatisTemplate.getSqlSession(true);
+		result = dao.selectRowList(session, mno);
+		session.close();
 		return result;
 	}
 }

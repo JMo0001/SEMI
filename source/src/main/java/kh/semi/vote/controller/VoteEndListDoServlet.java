@@ -32,7 +32,7 @@ public class VoteEndListDoServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		VoteService service = new VoteService();
-		List<ResultVo> vo = service.VoteEndListServlet();
+		List<ResultVo> vo = service.voteEndList();
 		
 		if(vo != null) {
 			request.setAttribute("endList", vo);
