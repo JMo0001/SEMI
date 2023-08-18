@@ -66,4 +66,13 @@ public class VoteService {
 		session.close();
 		return result;
 	}
+	
+	//페이징 처리 위한 total count
+	public int totalCnt() {
+		int result = 0;
+		SqlSession session = MybatisTemplate.getSqlSession(true);
+		result = dao.totalCnt(session);
+		session.close();
+		return result;
+	}
 }

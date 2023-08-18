@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="voteMapper">
 
-	<resultMap type="MemberVo" id="resultList">
+	<!-- <resultMap type="MemberVo" id="resultList">
 		<id property="mno" column="mno"/>
 		<result property="mname" column="mname"/>
 		<result property="mjumin" column="mjumin"/>
@@ -10,7 +10,11 @@
 		<result property="mcity" column="mcity"/>
 		<result property="pname" column="pname"/>
 		<result property="tel" column="tel"/>
-	</resultMap>
+	</resultMap> 
+		select 에서 비교하는 column명이 property와 동일하므로 필요 없음.
+		> resultMapy="resultList" 대신 resultType="MemberVo"로 바로 입력 가능함.
+		나머지도 동일.
+	-->
 	
 	<resultMap type="VoteDto" id="insert">
 		<id property="vjumin" column="vjumin"/>
@@ -47,7 +51,7 @@
 		<result property="per" column="per"/>
 	</resultMap>
 
-	<select id="selectList" resultMap="resultList">
+	<select id="selectList" resultType="MemberVo"><!-- resultMap=resultList"" -->
 		select mno, mname, pname, decode(pschool, 1,'고졸' ,2,'대졸', 3,'석사', 4,'박사') pschool, 
 				 mjumin, mcity, ptel1||'-'|| ptel2||'-'||ptel3 tel 
 				 from tbl_member join tbl_party using (pcode) 
@@ -59,15 +63,25 @@
 			values (#{vjumin}, #{vname}, #{vtime}, #{varea}, #{vconfirm}, #{mno})
 	</insert>
 	
-	<select id="selectCheck" resultMap="result">
+	<!-- rowbound 이용한 페이징 -->
+	<select id="selectCheckByRowBound" resultMap="result" >
+		select vname, 	extract(year from to_date(substr(vjumin,1,6),'rrmmdd'))||'년'||	substr(vjumin,3,2)||'월'||substr(vjumin,5,2)||'일' vbirth, 
+				'만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, 
+				decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, 
+				vtime, vconfirm from tbl_vote
+	</select>
+	
+	<!-- map 이용한 페이징 -->
+	<select id="selectCheck" resultMap="result" parameterType="map">
 		select * from (select rownum r1, tb1.* from (select vname, 
 				extract(year from to_date(substr(vjumin,1,6),'rrmmdd'))||'년'|| 
 				substr(vjumin,3,2)||'월'||substr(vjumin,5,2)||'일' vbirth, 
 				'만'||trunc(to_number(sysdate-to_date(substr(vjumin,1,6),'rrmmdd'))/365)||'세' vage, 
 				decode(substr(vjumin,7,1),1,'남',2,'여') gender, mno, 
 				vtime, vconfirm from tbl_vote) tb1 )tb2 
-				<!-- where r1 between ? and ? -->
+				where r1 between #{startNum} and #{endNum} 
 	</select>
+	
 	
 	<select id="voteEndList" resultMap="resultVote">
 		select rank() over(partition by mcity order by cnt desc) rank, mcity, mno, pname, mname, cnt, 
@@ -82,7 +96,7 @@
 				    join tbl_grade using(mno)
 	</select>
 	
-	<select id="selectRowList" resultMap="result" parameterType="string">
+	<select id="selectRowList" resultMap="result">
 		select * from 
 				( select mcity, mno, mname, cnt, round(ratio_to_report(cnt) over(PARTITION by mcity)*100,1)||'%' per 
 				  from (select mcity, mno, mname, count(mno) cnt 
@@ -92,6 +106,10 @@
 				  group by mcity, mno, mname 
 			      order by mcity, cnt desc)
 					) where mno=#{mno}
+	</select>
+	
+	<select id="totalCnt" resultType="_int">
+		select count(*) cnt from tbl_vote
 	</select>
 
 </mapper>
