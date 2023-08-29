@@ -82,7 +82,6 @@
 				where r1 between #{startNum} and #{endNum} 
 	</select>
 	
-	
 	<select id="voteEndList" resultMap="resultVote">
 		select rank() over(partition by mcity order by cnt desc) rank, mcity, mno, pname, mname, cnt, 
 				gschool_Name||' 졸업' gschoolname, 
